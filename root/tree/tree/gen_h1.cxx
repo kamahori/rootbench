@@ -55,6 +55,8 @@ int GetCompressionSettings(std::string shorthand)
       return 207;
    if (shorthand == "zstd")
       return 505;
+   if (shorthand == "lz4bs")
+      return 604;
    if (shorthand == "none")
       return 0;
    abort();

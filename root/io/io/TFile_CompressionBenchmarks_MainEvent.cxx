@@ -11,7 +11,8 @@ static std::string GetAlgoName(int algo) {
       {1, "zlib"},
       {2, "lzma"},
       {4, "lz4"},
-      {5, "zstd"}
+      {5, "zstd"},
+      {6, "lz4bs"}
    };
 
    if (algoName.find(algo) != algoName.end())
@@ -78,6 +79,9 @@ static void BM_MainEvent_Compress_LZ4(benchmark::State &state) {
 static void BM_MainEvent_Compress_ZSTD(benchmark::State &state) {
    BM_MainEvent_Compress(state, 5);
 }
+static void BM_MainEvent_Compress_LZ4BS(benchmark::State &state) {
+   BM_MainEvent_Compress(state, 6);
+}
 
 
 static void BM_MainEvent_Decompress_ZLIB(benchmark::State &state) {
@@ -91,6 +95,9 @@ static void BM_MainEvent_Decompress_LZ4(benchmark::State &state) {
 }
 static void BM_MainEvent_Decompress_ZSTD(benchmark::State &state) {
    BM_MainEvent_Decompress(state, 5);
+}
+static void BM_MainEvent_Decompress_LZ4BS(benchmark::State &state) {
+   BM_MainEvent_Decompress(state, 6);
 }
 
 
@@ -111,6 +118,10 @@ BENCHMARK(BM_MainEvent_Compress_ZSTD)
 ->Arg(1)->Arg(6)->Arg(9)
 ->Unit(benchmark::kMillisecond)->Iterations(5);
 
+BENCHMARK(BM_MainEvent_Compress_LZ4BS)
+->Arg(1)->Arg(6)->Arg(9)
+->Unit(benchmark::kMillisecond)->Iterations(5);
+
 
 BENCHMARK(BM_MainEvent_Decompress_ZLIB)
 ->Arg(1)->Arg(6)->Arg(9)
@@ -125,6 +136,10 @@ BENCHMARK(BM_MainEvent_Decompress_LZ4)
 ->Unit(benchmark::kMillisecond)->Iterations(5);
 
 BENCHMARK(BM_MainEvent_Decompress_ZSTD)
+->Arg(1)->Arg(6)->Arg(9)
+->Unit(benchmark::kMillisecond)->Iterations(5);
+
+BENCHMARK(BM_MainEvent_Decompress_LZ4BS)
 ->Arg(1)->Arg(6)->Arg(9)
 ->Unit(benchmark::kMillisecond)->Iterations(5);
 

@@ -22,10 +22,11 @@ if(ROOT_root7_FOUND AND rootbench-datafiles)
     RNTupleH1Benchmarks.cxx
     LABEL short
     LIBRARIES Core Hist MathCore RIO Tree ROOTNTuple
-    DOWNLOAD_DATAFILES h1dst-lz4.root h1dst-lzma.root h1dst-none.root h1dst-zlib.root h1dst-zstd.root
+    DOWNLOAD_DATAFILES h1dst-lz4.root h1dst-lz4bs.root h1dst-lzma.root h1dst-none.root h1dst-zlib.root h1dst-zstd.root
     SETUP "${CMAKE_CURRENT_BINARY_DIR}/gen_h1 -o ${RB_DATASETDIR} -c zlib ${RB_DATASETDIR}/h1dst-zlib.root"
     SETUP "${CMAKE_CURRENT_BINARY_DIR}/gen_h1 -o ${RB_DATASETDIR} -c lzma ${RB_DATASETDIR}/h1dst-lzma.root"
     SETUP "${CMAKE_CURRENT_BINARY_DIR}/gen_h1 -o ${RB_DATASETDIR} -c lz4 ${RB_DATASETDIR}/h1dst-lz4.root"
     SETUP "${CMAKE_CURRENT_BINARY_DIR}/gen_h1 -o ${RB_DATASETDIR} -c zstd ${RB_DATASETDIR}/h1dst-zstd.root"
+    SETUP "${CMAKE_CURRENT_BINARY_DIR}/gen_h1 -o ${RB_DATASETDIR} -c lz4bs ${RB_DATASETDIR}/h1dst-lz4bs.root"
     SETUP "${CMAKE_CURRENT_BINARY_DIR}/gen_h1 -o ${RB_DATASETDIR} -c none ${RB_DATASETDIR}/h1dst-none.root")
 endif()
