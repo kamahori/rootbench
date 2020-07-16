@@ -20,7 +20,7 @@ static std::string GetAlgoName(int algo) {
         return "error";
 }
 
-static void ATLAS_Compress(benchmark::State &state, int algo) {
+static void BM_ATLAS_Compress(benchmark::State &state, int algo) {
     TFile *oldfile = new TFile((RB::GetDataDir() + "/gg_data_zstd.root").c_str());
     TTree *oldtree = (TTree*)oldfile->Get("mini");
 
@@ -46,7 +46,7 @@ static void ATLAS_Compress(benchmark::State &state, int algo) {
     }
 }
 
-static void ATLAS_Decompress(benchmark::State &state, int algo) {
+static void BM_ATLAS_Decompress(benchmark::State &state, int algo) {
     int comp_level = state.range(0);
 
     std::string filename = "level_" + std::to_string(comp_level) + "_atlas_" + GetAlgoName(algo) + ".root";
@@ -65,65 +65,65 @@ static void ATLAS_Decompress(benchmark::State &state, int algo) {
     }
 }
 
-static void ATLAS_Compress_ZLIB(benchmark::State &state) {
-    ATLAS_Compress(state, 1);
+static void BM_ATLAS_Compress_ZLIB(benchmark::State &state) {
+    BM_ATLAS_Compress(state, 1);
 }
-static void ATLAS_Compress_LZMA(benchmark::State &state) {
-    ATLAS_Compress(state, 2);
+static void BM_ATLAS_Compress_LZMA(benchmark::State &state) {
+    BM_ATLAS_Compress(state, 2);
 }
-static void ATLAS_Compress_LZ4(benchmark::State &state) {
-    ATLAS_Compress(state, 4);
+static void BM_ATLAS_Compress_LZ4(benchmark::State &state) {
+    BM_ATLAS_Compress(state, 4);
 }
-static void ATLAS_Compress_ZSTD(benchmark::State &state) {
-    ATLAS_Compress(state, 5);
-}
-
-static void ATLAS_Decompress_ZLIB(benchmark::State &state) {
-    ATLAS_Decompress(state, 1);
-}
-static void ATLAS_Decompress_LZMA(benchmark::State &state) {
-    ATLAS_Decompress(state, 2);
-}
-static void ATLAS_Decompress_LZ4(benchmark::State &state) {
-    ATLAS_Decompress(state, 4);
-}
-static void ATLAS_Decompress_ZSTD(benchmark::State &state) {
-    ATLAS_Decompress(state, 5);
+static void BM_ATLAS_Compress_ZSTD(benchmark::State &state) {
+    BM_ATLAS_Compress(state, 5);
 }
 
+static void BM_ATLAS_Decompress_ZLIB(benchmark::State &state) {
+    BM_ATLAS_Decompress(state, 1);
+}
+static void BM_ATLAS_Decompress_LZMA(benchmark::State &state) {
+    BM_ATLAS_Decompress(state, 2);
+}
+static void BM_ATLAS_Decompress_LZ4(benchmark::State &state) {
+    BM_ATLAS_Decompress(state, 4);
+}
+static void BM_ATLAS_Decompress_ZSTD(benchmark::State &state) {
+    BM_ATLAS_Decompress(state, 5);
+}
 
-BENCHMARK(ATLAS_Compress_ZLIB)
+
+BENCHMARK(BM_ATLAS_Compress_ZLIB)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(ATLAS_Compress_LZMA)
+BENCHMARK(BM_ATLAS_Compress_LZMA)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(ATLAS_Compress_LZ4)
+BENCHMARK(BM_ATLAS_Compress_LZ4)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(ATLAS_Compress_ZSTD)
+BENCHMARK(BM_ATLAS_Compress_ZSTD)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
 
-BENCHMARK(ATLAS_Decompress_ZLIB)
+BENCHMARK(BM_ATLAS_Decompress_ZLIB)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(ATLAS_Decompress_LZMA)
+BENCHMARK(BM_ATLAS_Decompress_LZMA)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(ATLAS_Decompress_LZ4)
+BENCHMARK(BM_ATLAS_Decompress_LZ4)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(ATLAS_Decompress_ZSTD)
+BENCHMARK(BM_ATLAS_Decompress_ZSTD)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
 
 BENCHMARK_MAIN();

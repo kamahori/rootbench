@@ -20,7 +20,7 @@ static std::string GetAlgoName(int algo) {
         return "error";
 }
 
-static void NanoAOD_Compress(benchmark::State &state, int algo) {
+static void BM_NanoAOD_Compress(benchmark::State &state, int algo) {
     TFile *oldfile = new TFile((RB::GetDataDir() + "/Run2012B_DoubleMuParked.root").c_str());
     TTree *oldtree = (TTree*)oldfile->Get("Events");
 
@@ -46,7 +46,7 @@ static void NanoAOD_Compress(benchmark::State &state, int algo) {
     }
 }
 
-static void NanoAOD_Decompress(benchmark::State &state, int algo) {
+static void BM_NanoAOD_Decompress(benchmark::State &state, int algo) {
     int comp_level = state.range(0);
 
     std::string filename = "level_" + std::to_string(comp_level) + "_nanoaod_" + GetAlgoName(algo) + ".root";
@@ -65,65 +65,65 @@ static void NanoAOD_Decompress(benchmark::State &state, int algo) {
     }
 }
 
-static void NanoAOD_Compress_ZLIB(benchmark::State &state) {
-    NanoAOD_Compress(state, 1);
+static void BM_NanoAOD_Compress_ZLIB(benchmark::State &state) {
+    BM_NanoAOD_Compress(state, 1);
 }
-static void NanoAOD_Compress_LZMA(benchmark::State &state) {
-    NanoAOD_Compress(state, 2);
+static void BM_NanoAOD_Compress_LZMA(benchmark::State &state) {
+    BM_NanoAOD_Compress(state, 2);
 }
-static void NanoAOD_Compress_LZ4(benchmark::State &state) {
-    NanoAOD_Compress(state, 4);
+static void BM_NanoAOD_Compress_LZ4(benchmark::State &state) {
+    BM_NanoAOD_Compress(state, 4);
 }
-static void NanoAOD_Compress_ZSTD(benchmark::State &state) {
-    NanoAOD_Compress(state, 5);
-}
-
-static void NanoAOD_Decompress_ZLIB(benchmark::State &state) {
-    NanoAOD_Decompress(state, 1);
-}
-static void NanoAOD_Decompress_LZMA(benchmark::State &state) {
-    NanoAOD_Decompress(state, 2);
-}
-static void NanoAOD_Decompress_LZ4(benchmark::State &state) {
-    NanoAOD_Decompress(state, 4);
-}
-static void NanoAOD_Decompress_ZSTD(benchmark::State &state) {
-    NanoAOD_Decompress(state, 5);
+static void BM_NanoAOD_Compress_ZSTD(benchmark::State &state) {
+    BM_NanoAOD_Compress(state, 5);
 }
 
+static void BM_NanoAOD_Decompress_ZLIB(benchmark::State &state) {
+    BM_NanoAOD_Decompress(state, 1);
+}
+static void BM_NanoAOD_Decompress_LZMA(benchmark::State &state) {
+    BM_NanoAOD_Decompress(state, 2);
+}
+static void BM_NanoAOD_Decompress_LZ4(benchmark::State &state) {
+    BM_NanoAOD_Decompress(state, 4);
+}
+static void BM_NanoAOD_Decompress_ZSTD(benchmark::State &state) {
+    BM_NanoAOD_Decompress(state, 5);
+}
 
-BENCHMARK(NanoAOD_Compress_ZLIB)
+
+BENCHMARK(BM_NanoAOD_Compress_ZLIB)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(NanoAOD_Compress_LZMA)
+BENCHMARK(BM_NanoAOD_Compress_LZMA)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(NanoAOD_Compress_LZ4)
+BENCHMARK(BM_NanoAOD_Compress_LZ4)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(NanoAOD_Compress_ZSTD)
+BENCHMARK(BM_NanoAOD_Compress_ZSTD)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
 
-BENCHMARK(NanoAOD_Decompress_ZLIB)
+BENCHMARK(BM_NanoAOD_Decompress_ZLIB)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(NanoAOD_Decompress_LZMA)
+BENCHMARK(BM_NanoAOD_Decompress_LZMA)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(NanoAOD_Decompress_LZ4)
+BENCHMARK(BM_NanoAOD_Decompress_LZ4)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(NanoAOD_Decompress_ZSTD)
+BENCHMARK(BM_NanoAOD_Decompress_ZSTD)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
 
 BENCHMARK_MAIN();

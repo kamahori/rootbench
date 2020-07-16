@@ -20,7 +20,7 @@ static std::string GetAlgoName(int algo) {
         return "error";
 }
 
-static void LHCb_Compress(benchmark::State &state, int algo) {
+static void BM_LHCb_Compress(benchmark::State &state, int algo) {
     TFile *oldfile = new TFile((RB::GetDataDir() + "/lhcb_B2ppKK2011_md_noPIDstrip.root").c_str());
     TTree *oldtree1 = (TTree*)oldfile->Get("TupleB2ppKK/DecayTree");
     TTree *oldtree2 = (TTree*)oldfile->Get("TupleB2ppKPi/DecayTree");
@@ -50,7 +50,7 @@ static void LHCb_Compress(benchmark::State &state, int algo) {
     }
 }
 
-static void LHCb_Decompress(benchmark::State &state, int algo) {
+static void BM_LHCb_Decompress(benchmark::State &state, int algo) {
     int comp_level = state.range(0);
 
     std::string filename = "level_" + std::to_string(comp_level) + "_lhcb_" + GetAlgoName(algo) + ".root";
@@ -81,65 +81,65 @@ static void LHCb_Decompress(benchmark::State &state, int algo) {
     }
 }
 
-static void LHCb_Compress_ZLIB(benchmark::State &state) {
-    LHCb_Compress(state, 1);
+static void BM_LHCb_Compress_ZLIB(benchmark::State &state) {
+    BM_LHCb_Compress(state, 1);
 }
-static void LHCb_Compress_LZMA(benchmark::State &state) {
-    LHCb_Compress(state, 2);
+static void BM_LHCb_Compress_LZMA(benchmark::State &state) {
+    BM_LHCb_Compress(state, 2);
 }
-static void LHCb_Compress_LZ4(benchmark::State &state) {
-    LHCb_Compress(state, 4);
+static void BM_LHCb_Compress_LZ4(benchmark::State &state) {
+    BM_LHCb_Compress(state, 4);
 }
-static void LHCb_Compress_ZSTD(benchmark::State &state) {
-    LHCb_Compress(state, 5);
-}
-
-static void LHCb_Decompress_ZLIB(benchmark::State &state) {
-    LHCb_Decompress(state, 1);
-}
-static void LHCb_Decompress_LZMA(benchmark::State &state) {
-    LHCb_Decompress(state, 2);
-}
-static void LHCb_Decompress_LZ4(benchmark::State &state) {
-    LHCb_Decompress(state, 4);
-}
-static void LHCb_Decompress_ZSTD(benchmark::State &state) {
-    LHCb_Decompress(state, 5);
+static void BM_LHCb_Compress_ZSTD(benchmark::State &state) {
+    BM_LHCb_Compress(state, 5);
 }
 
+static void BM_LHCb_Decompress_ZLIB(benchmark::State &state) {
+    BM_LHCb_Decompress(state, 1);
+}
+static void BM_LHCb_Decompress_LZMA(benchmark::State &state) {
+    BM_LHCb_Decompress(state, 2);
+}
+static void BM_LHCb_Decompress_LZ4(benchmark::State &state) {
+    BM_LHCb_Decompress(state, 4);
+}
+static void BM_LHCb_Decompress_ZSTD(benchmark::State &state) {
+    BM_LHCb_Decompress(state, 5);
+}
 
-BENCHMARK(LHCb_Compress_ZLIB)
+
+BENCHMARK(BM_LHCb_Compress_ZLIB)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(LHCb_Compress_LZMA)
+BENCHMARK(BM_LHCb_Compress_LZMA)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(LHCb_Compress_LZ4)
+BENCHMARK(BM_LHCb_Compress_LZ4)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(LHCb_Compress_ZSTD)
+BENCHMARK(BM_LHCb_Compress_ZSTD)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
 
-BENCHMARK(LHCb_Decompress_ZLIB)
+BENCHMARK(BM_LHCb_Decompress_ZLIB)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(LHCb_Decompress_LZMA)
+BENCHMARK(BM_LHCb_Decompress_LZMA)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(LHCb_Decompress_LZ4)
+BENCHMARK(BM_LHCb_Decompress_LZ4)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
-BENCHMARK(LHCb_Decompress_ZSTD)
+BENCHMARK(BM_LHCb_Decompress_ZSTD)
 ->Arg(1)->Arg(6)->Arg(9)
-->Unit(benchmark::kMillsecond)->Iteration(5)
+->Unit(benchmark::kMillisecond)->Iterations(5);
 
 
 BENCHMARK_MAIN();
