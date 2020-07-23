@@ -22,59 +22,21 @@ static std::string GetAlgoName(int algo) {
         return "error";
 }
 
-// static void BM_LHCb_Compress(benchmark::State &state, int algo) {
-//     state.PauseTiming();
-
-//     int comp_level = state.range(0);
-//     std::string comp_setting = std::to_string(algo * 100 + comp_level);
-//     std::string old_filename = (RB::GetDataDir() + "/lhcb_B2ppKK2011_md_noPIDstrip.root").c_str();
-//     std::string new_filename = "level_" + std::to_string(comp_level) + "_lhcb_" + GetAlgoName(algo) + ".root";
-
-//     state.ResumeTiming();
-//     gSystem->Exec(("hadd -v 0 -f " + comp_setting + " " + new_filename + " " + old_filename).c_str());
-//     state.PauseTiming();
-
-//     TFile *newfile = new TFile(new_filename.c_str());
-//     state.counters("comp_size") = newfile->GetSize();
-//     newfile->Close();
-
-//     for (auto _ : state) {
-//         state.PauseTiming();
-
-//         TFile *newfile = new TFile(filename.c_str(), "recreate");
-//         TTree *newtree1 = oldtree1->CloneTree();
-//         TTree *newtree2 = oldtree2->CloneTree();
-//         TTree *newtree3 = oldtree3->CloneTree();
-//         newfile->SetCompressionAlgorithm(algo);
-//         newfile->SetCompressionLevel(comp_level);
-
-//         state.ResumeTiming();
-//         newfile->Write();
-//         state.PauseTiming();
-
-//         state.counters["comp_size"] = newfile->GetBytesWritten();
-//         newfile->Close();
-
-//         state.ResumeTiming();
-//     }
-// }
-
 static void BM_LHCb_Decompress(benchmark::State &state, int algo) {
-    state.PauseTiming();
 
     int comp_level = state.range(0);
     std::string comp_setting = std::to_string(algo * 100 + comp_level);
     std::string old_filename = (RB::GetDataDir() + "/lhcb_B2ppKK2011_md_noPIDstrip.root").c_str();
     std::string new_filename = "level_" + std::to_string(comp_level) + "_lhcb_" + GetAlgoName(algo) + ".root";
 
-    gSystem->Exec(("hadd -v 0 -f " + comp_setting + " " + new_filename + " " + old_filename).c_str());
+    gSystem->Exec(("hadd -v 0 -f" + comp_setting + " " + new_filename + " " + old_filename).c_str());
 
     TFile *newfile = new TFile(new_filename.c_str());
-    state.counters("comp_size") = newfile->GetSize();
+    state.counters["comp_size"] = newfile->GetSize();
     newfile->Close();
 
     for (auto _ : state) {
-        state.ResumeTiming();
+        
         TFile *hfile = new TFile(new_filename.c_str());
         TTree *tree1 = (TTree*)hfile->Get("TupleB2ppKK/DecayTree");
         TTree *tree2 = (TTree*)hfile->Get("TupleB2ppKPi/DecayTree");
@@ -99,24 +61,13 @@ static void BM_LHCb_Decompress(benchmark::State &state, int algo) {
             nb += tree3->GetEntry(ev);
         }
 
-        state.PauseTiming();
+        hfile->Close();
+
     }
 
-    gSystem->Exec(("rm -f " + new_filename));
+    gSystem->Exec(("rm -f " + new_filename).c_str());
 }
 
-// static void BM_LHCb_Compress_ZLIB(benchmark::State &state) {
-//     BM_LHCb_Compress(state, 1);
-// }
-// static void BM_LHCb_Compress_LZMA(benchmark::State &state) {
-//     BM_LHCb_Compress(state, 2);
-// }
-// static void BM_LHCb_Compress_LZ4(benchmark::State &state) {
-//     BM_LHCb_Compress(state, 4);
-// }
-// static void BM_LHCb_Compress_ZSTD(benchmark::State &state) {
-//     BM_LHCb_Compress(state, 5);
-// }
 
 static void BM_LHCb_Decompress_ZLIB(benchmark::State &state) {
     BM_LHCb_Decompress(state, 1);
@@ -133,23 +84,6 @@ static void BM_LHCb_Decompress_ZSTD(benchmark::State &state) {
 static void BM_LHCb_Decompress_LZ4BS(benchmark::State &state) {
     BM_LHCb_Decompress(state, 6);
 }
-
-
-// BENCHMARK(BM_LHCb_Compress_ZLIB)
-// ->Arg(1)->Arg(6)->Arg(9)
-// ->Unit(benchmark::kMillisecond)->Iterations(5);
-
-// BENCHMARK(BM_LHCb_Compress_LZMA)
-// ->Arg(1)->Arg(6)->Arg(9)
-// ->Unit(benchmark::kMillisecond)->Iterations(5);
-
-// BENCHMARK(BM_LHCb_Compress_LZ4)
-// ->Arg(1)->Arg(6)->Arg(9)
-// ->Unit(benchmark::kMillisecond)->Iterations(5);
-
-// BENCHMARK(BM_LHCb_Compress_ZSTD)
-// ->Arg(1)->Arg(6)->Arg(9)
-// ->Unit(benchmark::kMillisecond)->Iterations(5);
 
 
 BENCHMARK(BM_LHCb_Decompress_ZLIB)
